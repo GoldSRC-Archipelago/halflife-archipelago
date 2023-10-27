@@ -1,0 +1,3 @@
+[submodule "external/APCpp"]
+	path = external/APCpp
+	url = https://github.com/N00byKing/APCpp.git

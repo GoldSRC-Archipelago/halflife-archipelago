@@ -18,6 +18,8 @@
 #include "effects.h"
 #include "weaponinfo.h"
 
+#include "itemdef.h"
+
 class CBasePlayer;
 class CBasePlayerWeapon;
 
@@ -59,112 +61,6 @@ public:
 
 	bool m_fRegisteredSound; // whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
-
-
-// constant items
-#define ITEM_HEALTHKIT 1
-#define ITEM_ANTIDOTE 2
-#define ITEM_SECURITY 3
-#define ITEM_BATTERY 4
-
-#define MAX_NORMAL_BATTERY 100
-
-
-// weapon weight factors (for auto-switching)   (-1 = noswitch)
-#define CROWBAR_WEIGHT 0
-#define GLOCK_WEIGHT 10
-#define PYTHON_WEIGHT 15
-#define MP5_WEIGHT 15
-#define SHOTGUN_WEIGHT 15
-#define CROSSBOW_WEIGHT 10
-#define RPG_WEIGHT 20
-#define GAUSS_WEIGHT 20
-#define EGON_WEIGHT 20
-#define HORNETGUN_WEIGHT 10
-#define HANDGRENADE_WEIGHT 5
-#define SNARK_WEIGHT 5
-#define SATCHEL_WEIGHT -10
-#define TRIPMINE_WEIGHT -10
-
-
-// weapon clip/carry ammo capacities
-#define URANIUM_MAX_CARRY 100
-#define _9MM_MAX_CARRY 250
-#define _357_MAX_CARRY 36
-#define BUCKSHOT_MAX_CARRY 125
-#define BOLT_MAX_CARRY 50
-#define ROCKET_MAX_CARRY 5
-#define HANDGRENADE_MAX_CARRY 10
-#define SATCHEL_MAX_CARRY 5
-#define TRIPMINE_MAX_CARRY 5
-#define SNARK_MAX_CARRY 15
-#define HORNET_MAX_CARRY 8
-#define M203_GRENADE_MAX_CARRY 10
-
-// the maximum amount of ammo each weapon's clip can hold
-#define WEAPON_NOCLIP -1
-
-//#define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
-#define GLOCK_MAX_CLIP 17
-#define PYTHON_MAX_CLIP 6
-#define MP5_MAX_CLIP 50
-#define MP5_DEFAULT_AMMO 25
-#define SHOTGUN_MAX_CLIP 8
-#define CROSSBOW_MAX_CLIP 5
-#define RPG_MAX_CLIP 1
-#define GAUSS_MAX_CLIP WEAPON_NOCLIP
-#define EGON_MAX_CLIP WEAPON_NOCLIP
-#define HORNETGUN_MAX_CLIP WEAPON_NOCLIP
-#define HANDGRENADE_MAX_CLIP WEAPON_NOCLIP
-#define SATCHEL_MAX_CLIP WEAPON_NOCLIP
-#define TRIPMINE_MAX_CLIP WEAPON_NOCLIP
-#define SNARK_MAX_CLIP WEAPON_NOCLIP
-
-
-// the default amount of ammo that comes with each gun when it spawns
-#define GLOCK_DEFAULT_GIVE 17
-#define PYTHON_DEFAULT_GIVE 6
-#define MP5_DEFAULT_GIVE 25
-#define MP5_DEFAULT_AMMO 25
-#define MP5_M203_DEFAULT_GIVE 0
-#define SHOTGUN_DEFAULT_GIVE 12
-#define CROSSBOW_DEFAULT_GIVE 5
-#define RPG_DEFAULT_GIVE 1
-#define GAUSS_DEFAULT_GIVE 20
-#define EGON_DEFAULT_GIVE 20
-#define HANDGRENADE_DEFAULT_GIVE 5
-#define SATCHEL_DEFAULT_GIVE 1
-#define TRIPMINE_DEFAULT_GIVE 1
-#define SNARK_DEFAULT_GIVE 5
-#define HIVEHAND_DEFAULT_GIVE 8
-
-// The amount of ammo given to a player by an ammo item.
-#define AMMO_URANIUMBOX_GIVE 20
-#define AMMO_GLOCKCLIP_GIVE GLOCK_MAX_CLIP
-#define AMMO_357BOX_GIVE PYTHON_MAX_CLIP
-#define AMMO_MP5CLIP_GIVE MP5_MAX_CLIP
-#define AMMO_CHAINBOX_GIVE 200
-#define AMMO_M203BOX_GIVE 2
-#define AMMO_BUCKSHOTBOX_GIVE 12
-#define AMMO_CROSSBOWCLIP_GIVE CROSSBOW_MAX_CLIP
-#define AMMO_RPGCLIP_GIVE RPG_MAX_CLIP
-#define AMMO_URANIUMBOX_GIVE 20
-#define AMMO_SNARKBOX_GIVE 5
-
-// bullet types
-typedef enum
-{
-	BULLET_NONE = 0,
-	BULLET_PLAYER_9MM,		// glock
-	BULLET_PLAYER_MP5,		// mp5
-	BULLET_PLAYER_357,		// python
-	BULLET_PLAYER_BUCKSHOT, // shotgun
-	BULLET_PLAYER_CROWBAR,	// crowbar swipe
-
-	BULLET_MONSTER_9MM,
-	BULLET_MONSTER_MP5,
-	BULLET_MONSTER_12MM,
-} Bullet;
 
 
 #define ITEM_FLAG_SELECTONEMPTY 1
@@ -475,20 +371,6 @@ bool bIsMultiplayer();
 void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer);
 #endif
 
-enum glock_e
-{
-	GLOCK_IDLE1 = 0,
-	GLOCK_IDLE2,
-	GLOCK_IDLE3,
-	GLOCK_SHOOT,
-	GLOCK_SHOOT_EMPTY,
-	GLOCK_RELOAD,
-	GLOCK_RELOAD_NOT_EMPTY,
-	GLOCK_DRAW,
-	GLOCK_HOLSTER,
-	GLOCK_ADD_SILENCER
-};
-
 class CGlock : public CBasePlayerWeapon
 {
 public:
@@ -521,19 +403,6 @@ private:
 	unsigned short m_usFireGlock2;
 };
 
-enum crowbar_e
-{
-	CROWBAR_IDLE = 0,
-	CROWBAR_DRAW,
-	CROWBAR_HOLSTER,
-	CROWBAR_ATTACK1HIT,
-	CROWBAR_ATTACK1MISS,
-	CROWBAR_ATTACK2MISS,
-	CROWBAR_ATTACK2HIT,
-	CROWBAR_ATTACK3MISS,
-	CROWBAR_ATTACK3HIT
-};
-
 class CCrowbar : public CBasePlayerWeapon
 {
 public:
@@ -564,18 +433,6 @@ private:
 	unsigned short m_usCrowbar;
 };
 
-enum python_e
-{
-	PYTHON_IDLE1 = 0,
-	PYTHON_FIDGET,
-	PYTHON_FIRE1,
-	PYTHON_RELOAD,
-	PYTHON_HOLSTER,
-	PYTHON_DRAW,
-	PYTHON_IDLE2,
-	PYTHON_IDLE3
-};
-
 class CPython : public CBasePlayerWeapon
 {
 public:
@@ -601,18 +458,6 @@ public:
 
 private:
 	unsigned short m_usFirePython;
-};
-
-enum mp5_e
-{
-	MP5_LONGIDLE = 0,
-	MP5_IDLE1,
-	MP5_LAUNCH,
-	MP5_RELOAD,
-	MP5_DEPLOY,
-	MP5_FIRE1,
-	MP5_FIRE2,
-	MP5_FIRE3,
 };
 
 class CMP5 : public CBasePlayerWeapon
@@ -645,22 +490,6 @@ private:
 	unsigned short m_usMP52;
 };
 
-enum crossbow_e
-{
-	CROSSBOW_IDLE1 = 0, // full
-	CROSSBOW_IDLE2,		// empty
-	CROSSBOW_FIDGET1,	// full
-	CROSSBOW_FIDGET2,	// empty
-	CROSSBOW_FIRE1,		// full
-	CROSSBOW_FIRE2,		// reload
-	CROSSBOW_FIRE3,		// empty
-	CROSSBOW_RELOAD,	// from empty
-	CROSSBOW_DRAW1,		// full
-	CROSSBOW_DRAW2,		// empty
-	CROSSBOW_HOLSTER1,	// full
-	CROSSBOW_HOLSTER2,	// empty
-};
-
 class CCrossbow : public CBasePlayerWeapon
 {
 public:
@@ -690,20 +519,6 @@ public:
 private:
 	unsigned short m_usCrossbow;
 	unsigned short m_usCrossbow2;
-};
-
-enum shotgun_e
-{
-	SHOTGUN_IDLE = 0,
-	SHOTGUN_FIRE,
-	SHOTGUN_FIRE2,
-	SHOTGUN_RELOAD,
-	SHOTGUN_PUMP,
-	SHOTGUN_START_RELOAD,
-	SHOTGUN_DRAW,
-	SHOTGUN_HOLSTER,
-	SHOTGUN_IDLE4,
-	SHOTGUN_IDLE_DEEP
 };
 
 class CShotgun : public CBasePlayerWeapon
@@ -757,20 +572,6 @@ public:
 	void EXPORT Revive();
 
 	static CLaserSpot* CreateSpot();
-};
-
-enum rpg_e
-{
-	RPG_IDLE = 0,
-	RPG_FIDGET,
-	RPG_RELOAD,	   // to reload
-	RPG_FIRE2,	   // to empty
-	RPG_HOLSTER1,  // loaded
-	RPG_DRAW1,	   // loaded
-	RPG_HOLSTER2,  // unloaded
-	RPG_DRAW_UL,   // unloaded
-	RPG_IDLE_UL,   // unloaded idle
-	RPG_FIDGET_UL, // unloaded fidget
 };
 
 class CRpg : public CBasePlayerWeapon
@@ -839,19 +640,6 @@ public:
 #define GAUSS_PRIMARY_CHARGE_VOLUME 256 // how loud gauss is while charging
 #define GAUSS_PRIMARY_FIRE_VOLUME 450	// how loud gauss is when discharged
 
-enum gauss_e
-{
-	GAUSS_IDLE = 0,
-	GAUSS_IDLE2,
-	GAUSS_FIDGET,
-	GAUSS_SPINUP,
-	GAUSS_SPIN,
-	GAUSS_FIRE,
-	GAUSS_FIRE2,
-	GAUSS_HOLSTER,
-	GAUSS_DRAW
-};
-
 class CGauss : public CBasePlayerWeapon
 {
 public:
@@ -900,21 +688,6 @@ private:
 private:
 	unsigned short m_usGaussFire;
 	unsigned short m_usGaussSpin;
-};
-
-enum egon_e
-{
-	EGON_IDLE1 = 0,
-	EGON_FIDGET1,
-	EGON_ALTFIREON,
-	EGON_ALTFIRECYCLE,
-	EGON_ALTFIREOFF,
-	EGON_FIRE1,
-	EGON_FIRE2,
-	EGON_FIRE3,
-	EGON_FIRE4,
-	EGON_DRAW,
-	EGON_HOLSTER
 };
 
 enum EGON_FIRESTATE
@@ -999,16 +772,6 @@ private:
 	unsigned short m_usEgonFire;
 };
 
-enum hgun_e
-{
-	HGUN_IDLE1 = 0,
-	HGUN_FIDGETSWAY,
-	HGUN_FIDGETSHAKE,
-	HGUN_DOWN,
-	HGUN_UP,
-	HGUN_SHOOT
-};
-
 class CHgun : public CBasePlayerWeapon
 {
 public:
@@ -1050,18 +813,6 @@ private:
 	unsigned short m_usHornetFire;
 };
 
-enum handgrenade_e
-{
-	HANDGRENADE_IDLE = 0,
-	HANDGRENADE_FIDGET,
-	HANDGRENADE_PINPULL,
-	HANDGRENADE_THROW1, // toss
-	HANDGRENADE_THROW2, // medium
-	HANDGRENADE_THROW3, // hard
-	HANDGRENADE_HOLSTER,
-	HANDGRENADE_DRAW
-};
-
 class CHandGrenade : public CBasePlayerWeapon
 {
 public:
@@ -1084,23 +835,6 @@ public:
 		return false;
 #endif
 	}
-};
-
-enum satchel_e
-{
-	SATCHEL_IDLE1 = 0,
-	SATCHEL_FIDGET1,
-	SATCHEL_DRAW,
-	SATCHEL_DROP
-};
-
-enum satchel_radio_e
-{
-	SATCHEL_RADIO_IDLE1 = 0,
-	SATCHEL_RADIO_FIDGET1,
-	SATCHEL_RADIO_DRAW,
-	SATCHEL_RADIO_FIRE,
-	SATCHEL_RADIO_HOLSTER
 };
 
 class CSatchel : public CBasePlayerWeapon
@@ -1138,19 +872,6 @@ public:
 	}
 };
 
-enum tripmine_e
-{
-	TRIPMINE_IDLE1 = 0,
-	TRIPMINE_IDLE2,
-	TRIPMINE_ARM1,
-	TRIPMINE_ARM2,
-	TRIPMINE_FIDGET,
-	TRIPMINE_HOLSTER,
-	TRIPMINE_DRAW,
-	TRIPMINE_WORLD,
-	TRIPMINE_GROUND,
-};
-
 class CTripmine : public CBasePlayerWeapon
 {
 public:
@@ -1181,16 +902,6 @@ public:
 
 private:
 	unsigned short m_usTripFire;
-};
-
-enum squeak_e
-{
-	SQUEAK_IDLE1 = 0,
-	SQUEAK_FIDGETFIT,
-	SQUEAK_FIDGETNIP,
-	SQUEAK_DOWN,
-	SQUEAK_UP,
-	SQUEAK_THROW
 };
 
 class CSqueak : public CBasePlayerWeapon

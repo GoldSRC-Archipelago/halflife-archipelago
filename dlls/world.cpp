@@ -496,8 +496,19 @@ CWorld::~CWorld()
 void CWorld::Spawn()
 {
 	g_fGameOver = false;
+	APJunk();
 	Precache();
 }
+
+#ifndef CLIENT_DLL
+void CWorld::APJunk()
+{
+	if (CVAR_GET_FLOAT("sv_pausable") == 1)
+		CVAR_SET_FLOAT("sv_pausable", 0);
+	
+	//...add our rest here!
+}
+#endif
 
 void CWorld::Precache()
 {

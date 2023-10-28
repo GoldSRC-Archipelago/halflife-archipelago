@@ -342,7 +342,7 @@ public:
 
 
 	//
-	static CBaseEntity* Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner = NULL);
+	static CBaseEntity* Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner = NULL, bool bDropped = false);
 
 	virtual bool FBecomeProne() { return false; }
 	edict_t* edict() { return ENT(pev); }
@@ -748,9 +748,11 @@ public:
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	
-	void APJunk();
+	//void APJunk();
+	void APLogic();
 
 	static inline CWorld* World = nullptr;
+	static inline Archipelago* Arch = nullptr;
 };
 
 inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;

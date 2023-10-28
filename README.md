@@ -13,6 +13,11 @@ Installation instructions
 
 See [INSTALL.md](INSTALL.md)
 
+NOTICE
+======================
+
+This repo uses some code from [Daivuk's APDoom](https://github.com/Daivuk/apdoom).
+
 Half Life 1 SDK LICENSE
 ======================
 

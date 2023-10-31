@@ -16,6 +16,9 @@ class CArchipelago : public CBaseEntity
 		void DizzyTrap();
 		void BoomTrap();
 		
+	private:
+		char MSGForm[256];
+		
 };
 
 class CArchipelagoPickup : public CItem

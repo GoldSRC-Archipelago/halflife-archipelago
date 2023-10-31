@@ -101,6 +101,7 @@ public:
 
 	int random_seed; // See that is shared between client & server for shared weapons code
 
+	float m_flAdrenalineTime;
 	int m_iPlayerSound;		// the index of the sound list slot reserved for this player
 	int m_iTargetVolume;	// ideal sound volume.
 	int m_iWeaponVolume;	// how loud the player's weapon is right now.
@@ -298,6 +299,8 @@ public:
 	int GiveAmmo(int iAmount, const char* szName, int iMax) override;
 	void SendAmmoUpdate();
 	void SendSingleAmmoUpdate(int ammoIndex);
+	
+	void APHL_Logic();
 
 private:
 	void InternalSendSingleAmmoUpdate(int ammoIndex);

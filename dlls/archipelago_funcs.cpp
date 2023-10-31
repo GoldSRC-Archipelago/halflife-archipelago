@@ -24,11 +24,12 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
+#include <string>
 
 #include "Archipelago.h"
 
 static AP_RoomInfo APHL_Room;
-bool ap_is_connected = true;
+bool ap_is_connected = false;
 bool ap_initialized = false;
 char ap_savename[100];
 
@@ -37,6 +38,12 @@ cvar_t ap_game = {"ap_game", "idunno", FCVAR_SERVER};
 cvar_t ap_slotname = {"ap_slotname", "Who am I?", FCVAR_SERVER};
 cvar_t ap_password = {"ap_password", "", FCVAR_SERVER};
 
+/*
+////////////////////////////
+	PURPOSE:
+Manage AP functionality.
+////////////////////////////
+*/
 LINK_ENTITY_TO_CLASS(apmanager, CArchipelago);
 
 void CArchipelago::Spawn()
@@ -51,7 +58,7 @@ void CArchipelago::Spawn()
 
 void CArchipelago::APJunk()
 {
-	AP_Init(TOSTRING(ap_ip->string), "Half-Life", TOSTRING(ap_slotname->string), TOSTRING(ap_password->string));
+	AP_Init(TOSTRING(ap_ip->string), TOSTRING(ap_game->string), TOSTRING(ap_slotname->string), TOSTRING(ap_password->string));
 		AP_SetDeathLinkSupported(true);
 		AP_SetItemClearCallback(CArchipelago::ItemsClear);
 		AP_SetItemRecvCallback(CArchipelago::ItemRecv);
@@ -83,6 +90,7 @@ void CArchipelago::APJunk()
 		
 		if (can_break)
 			break;
+		
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		if (std::chrono::steady_clock::now() - start_time > std::chrono::seconds(10))
 			return ALERT(at_console, "AP: Failed to connect...\n");
@@ -91,3 +99,33 @@ void CArchipelago::APJunk()
 	
 }
 
+/*
+////////////////////////////
+	PURPOSE:
+AP item functionality.
+////////////////////////////
+*/
+LINK_ENTITY_TO_CLASS(item_ap, CArchipelagoPickup);
+
+void CArchipelagoPickup::Spawn()
+{
+	Precache();
+	SET_MODEL(ENT(pev), "models/w_archi.mdl");
+	CItem::Spawn();
+}
+
+void CArchipelagoPickup::Precache()
+{
+	PRECACHE_MODEL("models/w_archi.mdl");
+	PRECACHE_SOUND("ap/item.wav");
+}
+
+bool CArchipelagoPickup::MyTouch(CBasePlayer* pPlayer)
+{
+	if (pPlayer->pev->deadflag != DEAD_NO)
+		return false;
+	
+	AP_SendItem(pev->health);
+	
+	EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "ap/item.wav", 1, ATTN_NORM);
+}

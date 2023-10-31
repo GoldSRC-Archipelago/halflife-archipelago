@@ -42,6 +42,8 @@
 #include "UserMessages.h"
 #include "client.h"
 
+#include "Archipelago.h"
+
 // #define DUCKFIX
 
 extern void CopyToBodyQue(entvars_t* pev);
@@ -62,6 +64,8 @@ extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
 // Global Savedata for player
 TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 	{
+		DEFINE_FIELD(CBasePlayer, m_flAdrenalineTime, FIELD_TIME),
+		
 		DEFINE_FIELD(CBasePlayer, m_flFlashLightTime, FIELD_TIME),
 		DEFINE_FIELD(CBasePlayer, m_iFlashBattery, FIELD_INTEGER),
 
@@ -366,6 +370,7 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 		// blasts damage armor more.
 		flBonus *= 2;
 	}
+		
 
 	// Already dead
 	if (!IsAlive())
@@ -405,6 +410,20 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 			pev->armorvalue -= flArmor;
 
 		flDamage = flNew;
+	}
+	
+	//we should be invincible for a bit after adrenaline
+	if (m_flAdrenalineTime > gpGlobals->time)
+		return false;
+
+	//adrenaline
+	if (0 != m_rgItems[ITEM_ADRENALINE] && flDamage >= flHealthPrev)
+	{
+		pev->health = 100;
+		UTIL_ScreenFade(edict(), Vector(32, 231, 245), 0.5, 0.3, 255);
+		SetSuitUpdate("!HEV_HEAL4", false, SUIT_REPEAT_OK);
+		m_flAdrenalineTime = gpGlobals->time
+		return false;
 	}
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
@@ -1244,16 +1263,16 @@ void CBasePlayer::PlayerDeathThink()
 	// if the player has been dead for one second longer than allowed by forcerespawn,
 	// forcerespawn isn't on. Send the player off to an intermission camera until they
 	// choose to respawn.
-	if (g_pGameRules->IsMultiplayer() && (gpGlobals->time > (m_fDeadTime + 6)) && (m_afPhysicsFlags & PFLAG_OBSERVER) == 0)
-	{
+	//if (g_pGameRules->IsMultiplayer() && (gpGlobals->time > (m_fDeadTime + 6)) && (m_afPhysicsFlags & PFLAG_OBSERVER) == 0)
+	//{
 		// go to dead camera.
-		StartDeathCam();
-	}
+		//StartDeathCam();
+	//}
 
 	if (0 != pev->iuser1) // player is in spectator mode
 		return;
 
-	// wait for any button down,  or mp_forcerespawn is set and the respawn time is up
+	// wait for any button down
 	if (!fAnyButtonDown && !(g_pGameRules->IsMultiplayer() && forcerespawn.value > 0 && (gpGlobals->time > (m_fDeadTime + 5))))
 		return;
 
@@ -1921,6 +1940,10 @@ void CBasePlayer::PreThink()
 	{
 		pev->velocity = g_vecZero;
 	}
+	
+	//AP logic
+	APHL_Logic();
+	
 }
 /* Time based Damage works as follows: 
 	1) There are several types of timebased damage:
@@ -2783,6 +2806,7 @@ ReturnSpot:
 void CBasePlayer::Spawn()
 {
 	m_bIsSpawning = true;
+	AP_DeathLinkClear();
 
 	//Make sure this gets reset even if somebody adds an early return or throws an exception.
 	const CallOnDestroy resetIsSpawning{[this]()
@@ -2836,6 +2860,9 @@ void CBasePlayer::Spawn()
 
 	m_iFlashBattery = 99;
 	m_flFlashLightTime = 1; // force first message
+
+	//AP: new
+	m_flAdrenalineTime = 0.0;
 
 	// dont let uninitialized value here hurt the player
 	m_flFallVelocity = 0;
@@ -3907,6 +3934,14 @@ void CBasePlayer::ItemPostFrame()
 		return;
 
 	m_pActiveItem->ItemPostFrame();
+	
+	if (AP_DeathLinkPending())
+	{
+		int pitch = 96 + RANDOM_LONG(0, 16);
+		TakeDamage(CWorld::World->pev, CWorld::World->pev, pev->health*2, DMG_SHOCK);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "ap/deathlink.wav", 1.0, ATTN_NORM, 0, pitch);
+	}
+		
 }
 
 int CBasePlayer::AmmoInventory(int iAmmoIndex)

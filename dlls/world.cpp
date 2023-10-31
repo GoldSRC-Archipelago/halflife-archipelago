@@ -34,6 +34,8 @@
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 
+#include "Archipelago.h"
+
 CGlobalState gGlobalState;
 
 extern void W_Precache();
@@ -481,6 +483,16 @@ CWorld::CWorld()
 	}
 
 	World = this;
+	
+	if (Arch)
+	{
+		ALERT(at_error, "Multiple arch managers aren't meant to be recreated!\nAlan, please don't do this.\n");
+		return;
+	}
+	
+	Arch = GetClassPtr((CArchipelago*)NULL);
+	Arch->pev->classname = MAKE_STRING("apworld");
+	Arch->Spawn();
 }
 
 CWorld::~CWorld()
@@ -490,25 +502,23 @@ CWorld::~CWorld()
 		return;
 	}
 
+	if (Arch)
+	{
+		Arch->Kill()
+		Arch = nullptr;
+	}
+
 	World = nullptr;
 }
 
 void CWorld::Spawn()
 {
 	g_fGameOver = false;
-	APJunk();
 	Precache();
+	APJunk();
+	SetThink(&CWorld::APLogic);
+	pev->nextthink = gpGlobals->time;
 }
-
-#ifndef CLIENT_DLL
-void CWorld::APJunk()
-{
-	if (CVAR_GET_FLOAT("sv_pausable") == 1)
-		CVAR_SET_FLOAT("sv_pausable", 0);
-	
-	//...add our rest here!
-}
-#endif
 
 void CWorld::Precache()
 {
@@ -700,6 +710,9 @@ void CWorld::Precache()
 	{
 		CVAR_SET_FLOAT("mp_defaultteam", 0);
 	}
+	
+	//Archipelago::Precache();
+	
 }
 
 

@@ -752,7 +752,7 @@ public:
 	void APLogic();
 
 	static inline CWorld* World = nullptr;
-	static inline Archipelago* Arch = nullptr;
+	static inline CArchipelago* Arch = nullptr;
 };
 
 inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;

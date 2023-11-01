@@ -14,6 +14,7 @@
 ****/
 
 #pragma once
+#include "cbase.h"
 
 class CItem : public CBaseEntity
 {

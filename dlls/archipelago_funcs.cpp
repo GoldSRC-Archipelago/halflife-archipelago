@@ -51,14 +51,19 @@ void CArchipelago::Spawn()
 	if (CVAR_GET_FLOAT("sv_pausable") == 1)
 		CVAR_SET_FLOAT("sv_pausable", 0);
 	Precache();
-	APJunk();
+	APStartup();
 	SetThink(&CArchipelago::APLogic);
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-void CArchipelago::APJunk()
+void CArchipelago::APStartup()
 {
-	AP_Init(TOSTRING(ap_ip->string), TOSTRING(ap_game->string), TOSTRING(ap_slotname->string), TOSTRING(ap_password->string));
+	std::string ipVal(ap_ip.value);
+	std::string gameVal(ap_game.value);
+	std::string slotVal(ap_slotname.value);
+	std::string passVal(ap_password.value);
+	
+	AP_Init(ipVal, gameVal, slotVal, passVal);
 		AP_SetDeathLinkSupported(true);
 		AP_SetItemClearCallback(CArchipelago::ItemsClear);
 		AP_SetItemRecvCallback(CArchipelago::ItemRecv);

@@ -1,10 +1,11 @@
 #pragma once
-#include "cbase.h"
 #include "items.h"
 
 class CArchipelago : public CBaseEntity
 {
 	public:
+		CArchipelago();
+		~CArchipelago();
 		void Spawn() override;
 		void Precache() override;
 		void APStartup();
@@ -27,5 +28,5 @@ class CArchipelagoPickup : public CItem
 		void Spawn() override;
 		void Precache() override;
 		
-		bool MyTouch() override;
+		bool MyTouch(CBasePlayer* pPlayer) override;
 };

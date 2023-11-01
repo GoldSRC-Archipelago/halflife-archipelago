@@ -49,6 +49,7 @@ CBaseEntity
 #include "saverestore.h"
 #include "schedule.h"
 #include "monsterevent.h"
+#include "ap_ents.h"
 
 // C functions for external declarations that call the appropriate C++ methods
 
@@ -752,7 +753,7 @@ public:
 	void APLogic();
 
 	static inline CWorld* World = nullptr;
-	static inline CArchipelago* Arch = nullptr;
+	//static inline CArchipelago* Arch = nullptr;
 };
 
 inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;

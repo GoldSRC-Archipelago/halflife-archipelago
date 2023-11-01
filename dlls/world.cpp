@@ -34,7 +34,7 @@
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 
-#include "Archipelago.h"
+#include "ap_ents.h"
 
 CGlobalState gGlobalState;
 
@@ -484,15 +484,15 @@ CWorld::CWorld()
 
 	World = this;
 	
-	if (Arch)
+/* 	if (Arch)
 	{
 		ALERT(at_error, "Multiple arch managers aren't meant to be recreated!\nAlan, please don't do this.\n");
 		return;
-	}
+	} */
 	
-	Arch = GetClassPtr((CArchipelago*)NULL);
+/* 	Arch = GetClassPtr((CArchipelago*)NULL);
 	Arch->pev->classname = MAKE_STRING("apworld");
-	Arch->Spawn();
+	Arch->Spawn(); */
 }
 
 CWorld::~CWorld()
@@ -502,11 +502,11 @@ CWorld::~CWorld()
 		return;
 	}
 
-	if (Arch)
+/* 	if (Arch)
 	{
-		Arch->Kill()
+		REMOVE_ENTITY(ENT(Arch->pev));
 		Arch = nullptr;
-	}
+	} */
 
 	World = nullptr;
 }
@@ -515,7 +515,7 @@ void CWorld::Spawn()
 {
 	g_fGameOver = false;
 	Precache();
-	APJunk();
+	//APJunk();
 	SetThink(&CWorld::APLogic);
 	pev->nextthink = gpGlobals->time;
 }

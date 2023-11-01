@@ -41,6 +41,7 @@
 #include "soundent.h"
 #include "effects.h"
 #include "customentity.h"
+#include "ap_ents.h"
 
 int g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 
@@ -60,6 +61,7 @@ int g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when so
 #define HGRUNT_HANDGRENADE (1 << 1)
 #define HGRUNT_GRENADELAUNCHER (1 << 2)
 #define HGRUNT_SHOTGUN (1 << 3)
+#define HGRUNT_FIRST (1 << 4)
 
 #define HEAD_GROUP 1
 #define HEAD_GRUNT 0
@@ -303,6 +305,18 @@ void CHGrunt::GibMonster()
 			{
 				pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
 				pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
+			}
+		}
+		
+		if (FBitSet(pev->weapons, HGRUNT_FIRST))
+		{
+			//DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
+			CArchipelagoPickup* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
+			if (apPick)
+			{
+				apPick->pev->health = FIRSTHGRUNT_ID;
+				apPick->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
+				apPick->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
 			}
 		}
 	}
@@ -833,6 +847,9 @@ void CHGrunt::Shotgun()
 	SetBlending(0, angDir.x);
 }
 
+//placeholder for now.
+#define FIRSTHGRUNT_ID 69
+
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
@@ -868,6 +885,13 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
 			{
 				DropItem("ammo_ARgrenades", BodyTarget(pev->origin), vecGunAngles);
+			}
+			if (FBitSet(pev->weapons, HGRUNT_AP))
+			{
+				//DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
+				CArchipelagoPickup* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
+				if (apPick)
+					apPick->pev->health = FIRSTHGRUNT_ID;
 			}
 		}
 	}
@@ -1001,7 +1025,7 @@ void CHGrunt::Spawn()
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
-	if (pev->weapons == 0)
+	if (pev->weapons == 0 || FBitSet(pev->weapons, HGRUNT_FIRST))
 	{
 		// initialize to original values
 		pev->weapons = HGRUNT_9MMAR | HGRUNT_HANDGRENADE;

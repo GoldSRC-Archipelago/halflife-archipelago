@@ -422,7 +422,7 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 		pev->health = 100;
 		UTIL_ScreenFade(edict(), Vector(32, 231, 245), 0.5, 0.3, 255);
 		SetSuitUpdate("!HEV_HEAL4", false, SUIT_REPEAT_OK);
-		m_flAdrenalineTime = gpGlobals->time
+		m_flAdrenalineTime = gpGlobals->time;
 		return false;
 	}
 

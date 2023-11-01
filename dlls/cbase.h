@@ -49,7 +49,7 @@ CBaseEntity
 #include "saverestore.h"
 #include "schedule.h"
 #include "monsterevent.h"
-#include "ap_ents.h"
+//#include "ap_ents.h"
 
 // C functions for external declarations that call the appropriate C++ methods
 
@@ -750,10 +750,10 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	
 	//void APJunk();
-	void APLogic();
+	//void APLogic();
 
 	static inline CWorld* World = nullptr;
-	//static inline CArchipelago* Arch = nullptr;
+	//static inline CBaseEntity* Arch = nullptr;
 };
 
 inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;

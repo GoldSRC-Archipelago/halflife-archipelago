@@ -45,6 +45,9 @@
 
 int g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 
+//placeholder for now.
+#define FIRSTHGRUNT_ID 69
+
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
@@ -311,7 +314,7 @@ void CHGrunt::GibMonster()
 		if (FBitSet(pev->weapons, HGRUNT_FIRST))
 		{
 			//DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
-			CArchipelagoPickup* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
+			CBaseEntity* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
 			if (apPick)
 			{
 				apPick->pev->health = FIRSTHGRUNT_ID;
@@ -847,9 +850,6 @@ void CHGrunt::Shotgun()
 	SetBlending(0, angDir.x);
 }
 
-//placeholder for now.
-#define FIRSTHGRUNT_ID 69
-
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
@@ -886,10 +886,10 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			{
 				DropItem("ammo_ARgrenades", BodyTarget(pev->origin), vecGunAngles);
 			}
-			if (FBitSet(pev->weapons, HGRUNT_AP))
+			if (FBitSet(pev->weapons, HGRUNT_FIRST))
 			{
 				//DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
-				CArchipelagoPickup* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
+				CBaseEntity* apPick = DropItem("item_archi", vecGunPos, vecGunAngles);
 				if (apPick)
 					apPick->pev->health = FIRSTHGRUNT_ID;
 			}

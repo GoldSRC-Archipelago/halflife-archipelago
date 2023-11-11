@@ -420,9 +420,10 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	if (0 != m_rgItems[ITEM_ADRENALINE] && flDamage >= flHealthPrev)
 	{
 		pev->health = 100;
-		UTIL_ScreenFade(edict(), Vector(32, 231, 245), 0.5, 0.3, 255);
-		SetSuitUpdate("!HEV_HEAL4", false, SUIT_REPEAT_OK);
-		m_flAdrenalineTime = gpGlobals->time;
+		UTIL_ScreenFade(ENT(pev), Vector(32, 231, 245), 0.5, 0.3, 255, FFADE_IN);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "player/adrenaline.wav", 0.6, ATTN_NORM, 0, PITCH_NORM);
+		SetSuitUpdate("!HEV_HEAL9", false, SUIT_REPEAT_OK);
+		m_flAdrenalineTime = gpGlobals->time + 10.0;
 		return false;
 	}
 

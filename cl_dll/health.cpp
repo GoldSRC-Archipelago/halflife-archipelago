@@ -61,6 +61,7 @@ bool CHudHealth::Init()
 	m_fAttackFront = m_fAttackRear = m_fAttackRight = m_fAttackLeft = 0;
 	giDmgHeight = 0;
 	giDmgWidth = 0;
+	m_pLocalPlayer = gEngfuncs.GetLocalPlayer();
 
 	memset(m_dmg, 0, sizeof(DAMAGE_IMAGE) * NUM_DMG_TYPES);
 
@@ -152,7 +153,11 @@ void CHudHealth::GetPainColor(int& r, int& g, int& b)
 	r = 255 - g;
 	b = 0;
 #else
-	if (m_iHealth > 25)
+	if (m_pLocalPlayer->m_flAdrenalineTime > gpGlobals->time)
+	{
+		UnpackRGB(r, g, b, RGB_ADRENALINE);
+	}
+	else if (m_iHealth > 25)
 	{
 		UnpackRGB(r, g, b, RGB_YELLOWISH);
 	}

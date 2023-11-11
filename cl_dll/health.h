@@ -69,4 +69,5 @@ private:
 	bool DrawDamage(float fTime);
 	void CalcDamageDirection(Vector vecFrom);
 	void UpdateTiles(float fTime, long bits);
+	cl_entity_t* m_pLocalPlayer;
 };

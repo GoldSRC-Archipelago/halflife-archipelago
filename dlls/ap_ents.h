@@ -1,6 +1,11 @@
 #pragma once
 #include "items.h"
 
+extern cvar_t ap_ip;
+extern cvar_t ap_game;
+extern cvar_t ap_slotname;
+extern cvar_t ap_password;
+
 class CArchipelago : public CBaseEntity
 {
 	public:
@@ -10,9 +15,9 @@ class CArchipelago : public CBaseEntity
 		void Precache() override;
 		void APStartup();
 		void APLogic();
-		void ItemsClear();
-		void ItemRecv(int itemid, bool notify);
-		void Checked(int location);
+/* 		void ItemsClear();
+		void ItemRecv(int64_t itemid, bool notify);
+		void Checked(int location); */
 		
 		void DizzyTrap();
 		void BoomTrap();

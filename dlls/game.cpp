@@ -40,6 +40,11 @@ cvar_t teamoverride = {"mp_teamoverride", "1"};
 cvar_t defaultteam = {"mp_defaultteam", "0"};
 cvar_t allowmonsters = {"mp_allowmonsters", "0", FCVAR_SERVER};
 
+cvar_t ap_ip = {"ap_ip", "exampleip.gg:5555", FCVAR_SERVER};
+cvar_t ap_game = {"ap_game", "idunno", FCVAR_SERVER};
+cvar_t ap_slotname = {"ap_slotname", "Who am I?", FCVAR_SERVER};
+cvar_t ap_password = {"ap_password", "", FCVAR_SERVER};
+
 cvar_t allow_spectators = {"allow_spectators", "0.0", FCVAR_SERVER}; // 0 prevents players from being spectators
 
 cvar_t mp_chattime = {"mp_chattime", "10", FCVAR_SERVER};
@@ -471,6 +476,13 @@ void GameDLLInit()
 		return;
 	}
 
+	//AP STUFF STARTS HERE
+		CVAR_REGISTER(&ap_ip);
+		CVAR_REGISTER(&ap_game);
+		CVAR_REGISTER(&ap_slotname);
+		CVAR_REGISTER(&ap_password);
+	//AP STUFF ENDS HERE
+
 	CVAR_REGISTER(&displaysoundlist);
 	CVAR_REGISTER(&allow_spectators);
 
@@ -492,6 +504,7 @@ void GameDLLInit()
 	CVAR_REGISTER(&teamoverride);
 	CVAR_REGISTER(&defaultteam);
 	CVAR_REGISTER(&allowmonsters);
+	
 
 	CVAR_REGISTER(&mp_chattime);
 

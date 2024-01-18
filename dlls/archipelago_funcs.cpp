@@ -33,11 +33,6 @@ bool ap_is_connected = false;
 bool ap_initialized = false;
 char ap_savename[100];
 
-cvar_t ap_ip = {"ap_ip", "exampleip.gg:5555", FCVAR_SERVER};
-cvar_t ap_game = {"ap_game", "idunno", FCVAR_SERVER};
-cvar_t ap_slotname = {"ap_slotname", "Who am I?", FCVAR_SERVER};
-cvar_t ap_password = {"ap_password", "", FCVAR_SERVER};
-
 /*
 ////////////////////////////
 	PURPOSE:
@@ -58,16 +53,12 @@ void CArchipelago::Spawn()
 
 void CArchipelago::APStartup()
 {
-	std::string ipVal(ap_ip.value);
-	std::string gameVal(ap_game.value);
-	std::string slotVal(ap_slotname.value);
-	std::string passVal(ap_password.value);
 	
-	AP_Init(ipVal, gameVal, slotVal, passVal);
+	AP_Init(ap_ip.string, "Half-Life 1", ap_slotname.string, ap_password.string);
 		AP_SetDeathLinkSupported(true);
-		AP_SetItemClearCallback(CArchipelago::ItemsClear);
-		AP_SetItemRecvCallback(CArchipelago::ItemRecv);
-		AP_SetLocationCheckedCallback(CArchipelago::Checked);
+		AP_SetItemClearCallback(&HLAP_ItemsClear);
+		AP_SetItemRecvCallback(&HLAP_ItemRecv);
+		AP_SetLocationCheckedCallback(&HLAP_Checked);
 	AP_Start();
 	
 	auto start_time = std::chrono::steady_clock::now();
@@ -133,4 +124,25 @@ bool CArchipelagoPickup::MyTouch(CBasePlayer* pPlayer)
 	AP_SendItem(pev->health);
 	
 	EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "ap/item.wav", 1, ATTN_NORM);
+}
+
+/*
+////////////////////////////
+	PURPOSE:
+Can't just use classes for funcs. Can't have shit in Detroit.
+////////////////////////////
+*/
+void HLAP_ItemsClear()
+{
+
+}
+
+void HLAP_ItemRecv(int64_t itemid, bool notify)
+{
+
+}
+
+void HLAP_Checked(int64_t location)
+{
+
 }
